@@ -8,6 +8,7 @@ import {IModel} from "../../interfaces/IModel";
 import {INotification} from "../../interfaces/INotification";
 import {IProxy} from "../../interfaces/IProxy";
 import {IView} from "../../interfaces/IView";
+import {Notification} from "../observer/Notification";
 
 /**
  * A base multiton <code>IFacade</code> implementation.

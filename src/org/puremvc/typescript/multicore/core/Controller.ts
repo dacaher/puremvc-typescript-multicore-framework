@@ -30,6 +30,49 @@ import {View} from "./View";
  */
 export class Controller implements IController {
     /**
+     * <code>Controller</code> multiton factory method.
+     *
+     * @param key
+     *        The multiton key of the instance of <code>Controller</code> to create or retrieve.
+     *
+     * @return
+     *        The multiton instance of <code>Controller</code>
+     */
+    public static getInstance(key: string): IController {
+        if (!Controller.instanceMap[key]) {
+            Controller.instanceMap[key] = new Controller(key);
+        }
+
+        return Controller.instanceMap[key];
+    }
+
+    /**
+     * Remove a <code>Controller</code> instance.
+     *
+     * @param key
+     *        Multiton key of the <code>Controller</code> instance to remove.
+     */
+    public static removeController(key: string): void {
+        delete Controller.instanceMap[key];
+    }
+
+    /**
+     * Error message used to indicate that a <code>Controller</code> singleton instance is
+     * already constructed for this multiton key.
+     *
+     * @protected
+     * @constant
+     */
+    protected static MULTITON_MSG: string = "Controller instance for this multiton key already constructed!";
+
+    /**
+     * <code>Controller</code> singleton instance map.
+     *
+     * @protected
+     */
+    protected static instanceMap = {};
+
+    /**
      * Local reference to the <code>View</code> singleton.
      *
      * @protected
@@ -72,26 +115,6 @@ export class Controller implements IController {
 
         this.multitonKey = key;
         this.initializeController();
-    }
-
-    /**
-     * Initialize the multiton <code>Controller</code> instance.
-     *
-     * Called automatically by the constructor.
-     *
-     * Note that if you are using a subclass of <code>View</code> in your application, you
-     * should <i>also</i> subclass <code>Controller</code> and override the
-     * <code>initializeController</code> method in the following way:
-     *
-     * <pre>
-     *        // Ensure that the Controller is talking to my <code>IView</code> implementation.
-     *        initializeController():void { this.view = MyView.getInstance( this.multitonKey ); }
-     * </pre>
-     *
-     * @protected
-     */
-    protected initializeController(): void {
-        this.view = View.getInstance(this.multitonKey);
     }
 
     /**
@@ -173,45 +196,22 @@ export class Controller implements IController {
     }
 
     /**
-     * Error message used to indicate that a <code>Controller</code> singleton instance is
-     * already constructed for this multiton key.
+     * Initialize the multiton <code>Controller</code> instance.
+     *
+     * Called automatically by the constructor.
+     *
+     * Note that if you are using a subclass of <code>View</code> in your application, you
+     * should <i>also</i> subclass <code>Controller</code> and override the
+     * <code>initializeController</code> method in the following way:
+     *
+     * <pre>
+     *        // Ensure that the Controller is talking to my <code>IView</code> implementation.
+     *        initializeController():void { this.view = MyView.getInstance( this.multitonKey ); }
+     * </pre>
      *
      * @protected
-     * @constant
      */
-    protected static MULTITON_MSG: string = "Controller instance for this multiton key already constructed!";
-
-    /**
-     * <code>Controller</code> singleton instance map.
-     *
-     * @protected
-     */
-    protected static instanceMap = {};
-
-    /**
-     * <code>Controller</code> multiton factory method.
-     *
-     * @param key
-     *        The multiton key of the instance of <code>Controller</code> to create or retrieve.
-     *
-     * @return
-     *        The multiton instance of <code>Controller</code>
-     */
-    public static getInstance(key: string): IController {
-        if (!Controller.instanceMap[key]) {
-            Controller.instanceMap[key] = new Controller(key);
-        }
-
-        return Controller.instanceMap[key];
-    }
-
-    /**
-     * Remove a <code>Controller</code> instance.
-     *
-     * @param key
-     *        Multiton key of the <code>Controller</code> instance to remove.
-     */
-    public static removeController(key: string): void {
-        delete Controller.instanceMap[key];
+    protected initializeController(): void {
+        this.view = View.getInstance(this.multitonKey);
     }
 }

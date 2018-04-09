@@ -20,6 +20,49 @@ import {IProxy} from "../interfaces/IProxy";
  */
 export class Model implements IModel {
     /**
+     * <code>Model</code> multiton factory method.
+     *
+     * @param key
+     *        The multiton key of the instance of <code>Model</code> to create or retrieve.
+     *
+     * @return
+     *        The singleton instance of the <code>Model</code>.
+     */
+    public static getInstance(key): IModel {
+        if (!Model.instanceMap[key]) {
+            Model.instanceMap[key] = new Model(key);
+        }
+
+        return Model.instanceMap[key];
+    }
+
+    /**
+     * Remove a <code>Model</code> instance
+     *
+     * @param key
+     *        Multiton key identifier for the <code>Model</code> instance to remove.
+     */
+    public static removeModel(key): void {
+        delete Model.instanceMap[key];
+    }
+
+    /**
+     * Error message used to indicate that a <code>Model</code> singleton instance is
+     * already constructed for this multiton key.
+     *
+     * @constant
+     * @protected
+     */
+    protected static MULTITON_MSG: string = "Model instance for this multiton key already constructed!";
+
+    /**
+     * <code>Model</code> singleton instance map.
+     *
+     * @protected
+     */
+    protected static instanceMap = {};
+
+    /**
      * HashTable of <code>IProxy</code> registered with the <code>Model</code>.
      *
      * @protected
@@ -53,18 +96,6 @@ export class Model implements IModel {
         this.multitonKey = key;
 
         this.initializeModel();
-    }
-
-    /**
-     * Initialize the multiton <code>Model</code> instance.
-     *
-     * Called automatically by the constructor. This is the opportunity to initialize the
-     * multiton instance in a subclass without overriding the constructor.
-     *
-     * @protected
-     */
-    protected initializeModel(): void {
-
     }
 
     /**
@@ -128,45 +159,14 @@ export class Model implements IModel {
     }
 
     /**
-     * Error message used to indicate that a <code>Model</code> singleton instance is
-     * already constructed for this multiton key.
+     * Initialize the multiton <code>Model</code> instance.
      *
-     * @constant
-     * @protected
-     */
-    protected static MULTITON_MSG: string = "Model instance for this multiton key already constructed!";
-
-    /**
-     * <code>Model</code> singleton instance map.
+     * Called automatically by the constructor. This is the opportunity to initialize the
+     * multiton instance in a subclass without overriding the constructor.
      *
      * @protected
      */
-    protected static instanceMap = {};
+    protected initializeModel(): void {
 
-    /**
-     * <code>Model</code> multiton factory method.
-     *
-     * @param key
-     *        The multiton key of the instance of <code>Model</code> to create or retrieve.
-     *
-     * @return
-     *        The singleton instance of the <code>Model</code>.
-     */
-    public static getInstance(key): IModel {
-        if (!Model.instanceMap[key]) {
-            Model.instanceMap[key] = new Model(key);
-        }
-
-        return Model.instanceMap[key];
-    }
-
-    /**
-     * Remove a <code>Model</code> instance
-     *
-     * @param key
-     *        Multiton key identifier for the <code>Model</code> instance to remove.
-     */
-    public static removeModel(key): void {
-        delete Model.instanceMap[key];
     }
 }

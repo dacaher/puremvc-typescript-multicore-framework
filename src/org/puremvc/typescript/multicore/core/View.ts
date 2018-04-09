@@ -24,6 +24,49 @@ import {Observer} from "../patterns/observer/Observer";
  */
 export class View implements IView {
     /**
+     * <code>View</code> multiton factory method.
+     *
+     * @param key
+     *        The multiton key of the instance of <code>View</code> to create or retrieve.
+     *
+     * @return
+     *        The singleton instance of <code>View</code>.
+     */
+    public static getInstance(key: string): IView {
+        if (!View.instanceMap[key]) {
+            View.instanceMap[key] = new View(key);
+        }
+
+        return View.instanceMap[key];
+    }
+
+    /**
+     * Remove a <code>View</code> instance.
+     *
+     * @param key
+     *        Key identifier of <code>View</code> instance to remove.
+     */
+    public static removeView(key: string): void {
+        delete View.instanceMap[key];
+    }
+
+    /**
+     * Error message used to indicate that a <code>View</code> singleton instance is
+     * already constructed for this multiton key.
+     *
+     * @constant
+     * @protected
+     */
+    protected static MULTITON_MSG: string = "View instance for this multiton key already constructed!";
+
+    /**
+     * <code>View</code> singleton instance map.
+     *
+     * @protected
+     */
+    protected static instanceMap = {};
+
+    /**
      * Mapping of <code>Mediator</code> names to <code>Mediator</code> instances.
      *
      * @protected
@@ -65,16 +108,6 @@ export class View implements IView {
         this.multitonKey = key;
 
         this.initializeView();
-    }
-
-    /**
-     * Initialize the multiton <code>View</code> instance.
-     *
-     * Called automatically by the constructor. This is the opportunity to initialize the
-     * multiton instance in a subclass without overriding the constructor.
-     */
-    protected initializeView(): void {
-
     }
 
     /**
@@ -265,45 +298,12 @@ export class View implements IView {
     }
 
     /**
-     * Error message used to indicate that a <code>View</code> singleton instance is
-     * already constructed for this multiton key.
+     * Initialize the multiton <code>View</code> instance.
      *
-     * @constant
-     * @protected
+     * Called automatically by the constructor. This is the opportunity to initialize the
+     * multiton instance in a subclass without overriding the constructor.
      */
-    protected static MULTITON_MSG: string = "View instance for this multiton key already constructed!";
+    protected initializeView(): void {
 
-    /**
-     * <code>View</code> singleton instance map.
-     *
-     * @protected
-     */
-    protected static instanceMap = {};
-
-    /**
-     * <code>View</code> multiton factory method.
-     *
-     * @param key
-     *        The multiton key of the instance of <code>View</code> to create or retrieve.
-     *
-     * @return
-     *        The singleton instance of <code>View</code>.
-     */
-    public static getInstance(key: string): IView {
-        if (!View.instanceMap[key]) {
-            View.instanceMap[key] = new View(key);
-        }
-
-        return View.instanceMap[key];
-    }
-
-    /**
-     * Remove a <code>View</code> instance.
-     *
-     * @param key
-     *        Key identifier of <code>View</code> instance to remove.
-     */
-    public static removeView(key: string): void {
-        delete View.instanceMap[key];
     }
 }

@@ -34,21 +34,21 @@ export class Controller implements IController {
      *
      * @protected
      */
-    view: IView = null;
+    protected view: IView = null;
 
     /**
      * Mapping of <code>Notification<code> names to <code>Command</code> constructors references.
      *
      * @protected
      */
-    commandMap: Object = null;
+    protected commandMap = {};
 
     /**
      * The multiton Key for this Core.
      *
      * @protected
      */
-    multitonKey: string = null;
+    protected multitonKey: string;
 
     /**
      * Constructs a <code>Controller</code> instance.
@@ -64,13 +64,13 @@ export class Controller implements IController {
      *        Throws an error if an instance for this multiton key has already been constructed.
      */
     constructor(key: string) {
-        if (Controller.instanceMap[key])
+        if (Controller.instanceMap[key]) {
             throw Error(Controller.MULTITON_MSG);
+        }
 
         Controller.instanceMap[key] = this;
 
         this.multitonKey = key;
-        this.commandMap = {};
         this.initializeController();
     }
 
@@ -90,7 +90,7 @@ export class Controller implements IController {
      *
      * @protected
      */
-    initializeController(): void {
+    protected initializeController(): void {
         this.view = View.getInstance(this.multitonKey);
     }
 
@@ -101,15 +101,15 @@ export class Controller implements IController {
      * @param notification
      *        The <code>INotification</code> the command will receive as parameter.
      */
-    executeCommand(notification: INotification): void {
+    public executeCommand(notification: INotification): void {
         /*
          * Typed any here instead of <code>Function</code> ( won't compile if set to Function
          * because today the compiler consider that <code>Function</code> is not newable and
          * doesn't have a <code>Class</code> type)
          */
-        var commandClassRef: any = this.commandMap[notification.getName()];
+        const commandClassRef: any = this.commandMap[notification.getName()];
         if (commandClassRef) {
-            var command: ICommand = <ICommand> /*</>*/ new commandClassRef();
+            const command: ICommand = new commandClassRef() as ICommand;
             command.initializeNotifier(this.multitonKey);
             command.execute(notification);
         }
@@ -133,9 +133,10 @@ export class Controller implements IController {
      * @param commandClassRef
      *        The constructor of the <code>ICommand</code>.
      */
-    registerCommand(notificationName: string, commandClassRef: Function): void {
-        if (!this.commandMap[notificationName])
+    public registerCommand(notificationName: string, commandClassRef: Function): void {
+        if (!this.commandMap[notificationName]) {
             this.view.registerObserver(notificationName, new Observer(this.executeCommand, this));
+        }
 
         this.commandMap[notificationName] = commandClassRef;
     }
@@ -151,7 +152,7 @@ export class Controller implements IController {
      *        An <code>ICommand</code> is currently registered for the given
      *        <code>notificationName</code>.
      */
-    hasCommand(notificationName: string): boolean {
+    public hasCommand(notificationName: string): boolean {
         return this.commandMap[notificationName] != null;
     }
 
@@ -163,14 +164,13 @@ export class Controller implements IController {
      *        The name of the <code>INotification</code> to remove the <code>ICommand</code>
      *        mapping for.
      */
-    removeCommand(notificationName: string): void {
+    public removeCommand(notificationName: string): void {
         // if the Command is registered...
         if (this.hasCommand(notificationName)) {
             this.view.removeObserver(notificationName, this);
             delete this.commandMap[notificationName];
         }
     }
-
 
     /**
      * Error message used to indicate that a <code>Controller</code> singleton instance is
@@ -179,14 +179,14 @@ export class Controller implements IController {
      * @protected
      * @constant
      */
-    static MULTITON_MSG: string = "Controller instance for this multiton key already constructed!";
+    protected static MULTITON_MSG: string = "Controller instance for this multiton key already constructed!";
 
     /**
      * <code>Controller</code> singleton instance map.
      *
      * @protected
      */
-    static instanceMap: Object = {};
+    protected static instanceMap = {};
 
     /**
      * <code>Controller</code> multiton factory method.
@@ -197,9 +197,10 @@ export class Controller implements IController {
      * @return
      *        The multiton instance of <code>Controller</code>
      */
-    static getInstance(key: string): IController {
-        if (!Controller.instanceMap[key])
+    public static getInstance(key: string): IController {
+        if (!Controller.instanceMap[key]) {
             Controller.instanceMap[key] = new Controller(key);
+        }
 
         return Controller.instanceMap[key];
     }
@@ -210,7 +211,7 @@ export class Controller implements IController {
      * @param key
      *        Multiton key of the <code>Controller</code> instance to remove.
      */
-    static removeController(key: string): void {
+    public static removeController(key: string): void {
         delete Controller.instanceMap[key];
     }
 }

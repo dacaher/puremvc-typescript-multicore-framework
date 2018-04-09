@@ -28,21 +28,21 @@ export class View implements IView {
      *
      * @protected
      */
-    mediatorMap: Object = null;
+    protected mediatorMap = {};
 
     /**
      * Mapping of <code>Notification</code> names to <code>Observers</code> lists.
      *
      * @protected
      */
-    observerMap: Object = null;
+    protected observerMap = {};
 
     /**
      * Multiton key for this <code>View</code> instance.
      *
      * @protected
      */
-    multitonKey: string = null;
+    protected multitonKey: string;
 
     /**
      * This <code>IView</code> implementation is a multiton, so you should not call the
@@ -56,14 +56,13 @@ export class View implements IView {
      *        Throws an error if an instance for this multiton key has already been constructed.
      */
     constructor(key: string) {
-        if (View.instanceMap[key])
+        if (View.instanceMap[key]) {
             throw Error(View.MULTITON_MSG);
+        }
 
         View.instanceMap[key] = this;
 
         this.multitonKey = key;
-        this.mediatorMap = {};
-        this.observerMap = {};
 
         this.initializeView();
     }
@@ -74,7 +73,7 @@ export class View implements IView {
      * Called automatically by the constructor. This is the opportunity to initialize the
      * multiton instance in a subclass without overriding the constructor.
      */
-    initializeView(): void {
+    protected initializeView(): void {
 
     }
 
@@ -89,12 +88,13 @@ export class View implements IView {
      * @param observer
      *        The <code>IObserver</code> to register.
      */
-    registerObserver(notificationName: string, observer: IObserver): void {
-        var observers: IObserver[] = this.observerMap[notificationName];
-        if (observers)
+    public registerObserver(notificationName: string, observer: IObserver): void {
+        const observers: IObserver[] = this.observerMap[notificationName];
+        if (observers) {
             observers.push(observer);
-        else
+        } else {
             this.observerMap[notificationName] = [observer];
+        }
     }
 
     /**
@@ -108,14 +108,14 @@ export class View implements IView {
      *        Remove the <code>IObserver</code> with this object as its
      *        <code>notifyContext</code>.
      */
-    removeObserver(notificationName: string, notifyContext: any): void {
-        //The observer list for the notification under inspection
-        var observers: IObserver[] = this.observerMap[notificationName];
+    public removeObserver(notificationName: string, notifyContext: any): void {
+        // The observer list for the notification under inspection
+        const observers: IObserver[] = this.observerMap[notificationName];
 
-        //Find the observer for the notifyContext.
-        var i: number = observers.length;
+        // Find the observer for the notifyContext.
+        let i: number = observers.length;
         while (i--) {
-            var observer: IObserver = observers[i];
+            const observer: IObserver = observers[i];
             if (observer.compareNotifyContext(notifyContext)) {
                 observers.splice(i, 1);
                 break;
@@ -126,8 +126,9 @@ export class View implements IView {
          * Also, when a Notification's Observer list length falls to zero, delete the
          * notification key from the observer map.
          */
-        if (observers.length == 0)
+        if (observers.length === 0) {
             delete this.observerMap[notificationName];
+        }
     }
 
     /**
@@ -140,16 +141,16 @@ export class View implements IView {
      * @param notification
      *        The <code>INotification</code> to notify <code>IObserver</code>s of.
      */
-    notifyObservers(notification: INotification): void {
-        var notificationName: string = notification.getName();
+    public notifyObservers(notification: INotification): void {
+        const notificationName: string = notification.getName();
 
-        var observersRef/*Array*/ = this.observerMap[notificationName];
+        const observersRef = this.observerMap[notificationName];
         if (observersRef) {
             // Copy the array.
-            var observers/*Array*/ = observersRef.slice(0);
-            var len/*Number*/ = observers.length;
-            for (var i/*Number*/ = 0; i < len; i++) {
-                var observer/*Observer*/ = observers[i];
+            const observers = observersRef.slice(0);
+            const len = observers.length;
+            for (let i = 0; i < len; i++) {
+                const observer = observers[i];
                 observer.notifyObserver(notification);
             }
         }
@@ -170,31 +171,33 @@ export class View implements IView {
      * @param mediator
      *        A reference to an <code>IMediator</code> implementation instance.
      */
-    registerMediator(mediator: IMediator): void {
-        var name: string = mediator.getMediatorName();
+    public registerMediator(mediator: IMediator): void {
+        const name: string = mediator.getMediatorName();
 
-        //Do not allow re-registration (you must removeMediator first).
-        if (this.mediatorMap[name])
+        // Do not allow re-registration (you must removeMediator first).
+        if (this.mediatorMap[name]) {
             return;
+        }
 
         mediator.initializeNotifier(this.multitonKey);
 
-        //Register the Mediator for retrieval by name.
+        // Register the Mediator for retrieval by name.
         this.mediatorMap[name] = mediator;
 
-        //Get Notification interests, if any.
-        var interests: string[] = mediator.listNotificationInterests();
-        var len: Number = interests.length;
+        // Get Notification interests, if any.
+        const interests: string[] = mediator.listNotificationInterests();
+        const len: number = interests.length;
         if (len > 0) {
-            //Create Observer referencing this mediator's handlNotification method.
-            var observer: IObserver = new Observer(mediator.handleNotification, mediator);
+            // Create Observer referencing this mediator's handlNotification method.
+            const observer: IObserver = new Observer(mediator.handleNotification, mediator);
 
-            //Register Mediator as Observer for its list of Notification interests.
-            for (var i: number = 0; i < len; i++)
+            // Register Mediator as Observer for its list of Notification interests.
+            for (let i: number = 0; i < len; i++) {
                 this.registerObserver(interests[i], observer);
+            }
         }
 
-        //Alert the mediator that it has been registered.
+        // Alert the mediator that it has been registered.
         mediator.onRegister();
     }
 
@@ -208,8 +211,8 @@ export class View implements IView {
      *        The <code>IMediator</code> instance previously registered with the given
      *        <code>mediatorName</code> or an explicit <code>null</code> if it doesn't exists.
      */
-    retrieveMediator(mediatorName: string): IMediator {
-        //Return a strict null when the mediator doesn't exist
+    public retrieveMediator(mediatorName: string): IMediator {
+        // Return a strict null when the mediator doesn't exist
         return this.mediatorMap[mediatorName] || null;
     }
 
@@ -223,24 +226,26 @@ export class View implements IView {
      *        The <code>IMediator</code> that was removed from the <code>View</code> or a
      *        strict <code>null</null> if the <code>Mediator</code> didn't exist.
      */
-    removeMediator(mediatorName: string): IMediator {
+    public removeMediator(mediatorName: string): IMediator {
         // Retrieve the named mediator
-        var mediator: IMediator = this.mediatorMap[mediatorName];
-        if (!mediator)
+        const mediator: IMediator = this.mediatorMap[mediatorName];
+        if (!mediator) {
             return null;
+        }
 
-        //Get Notification interests, if any.
-        var interests: string[] = mediator.listNotificationInterests();
+        // Get Notification interests, if any.
+        const interests: string[] = mediator.listNotificationInterests();
 
-        //For every notification this mediator is interested in...
-        var i: number = interests.length;
-        while (i--)
+        // For every notification this mediator is interested in...
+        let i: number = interests.length;
+        while (i--) {
             this.removeObserver(interests[i], mediator);
+        }
 
         // remove the mediator from the map
         delete this.mediatorMap[mediatorName];
 
-        //Alert the mediator that it has been removed
+        // Alert the mediator that it has been removed
         mediator.onRemove();
 
         return mediator;
@@ -255,10 +260,9 @@ export class View implements IView {
      * @return
      *        An <code>IMediator</code> is registered with the given <code>mediatorName</code>.
      */
-    hasMediator(mediatorName: string): boolean {
+    public hasMediator(mediatorName: string): boolean {
         return this.mediatorMap[mediatorName] != null;
     }
-
 
     /**
      * Error message used to indicate that a <code>View</code> singleton instance is
@@ -267,14 +271,14 @@ export class View implements IView {
      * @constant
      * @protected
      */
-    static MULTITON_MSG: string = "View instance for this multiton key already constructed!";
+    protected static MULTITON_MSG: string = "View instance for this multiton key already constructed!";
 
     /**
      * <code>View</code> singleton instance map.
      *
      * @protected
      */
-    static instanceMap: Object = {};
+    protected static instanceMap = {};
 
     /**
      * <code>View</code> multiton factory method.
@@ -285,9 +289,10 @@ export class View implements IView {
      * @return
      *        The singleton instance of <code>View</code>.
      */
-    static getInstance(key: string): IView {
-        if (!View.instanceMap[key])
+    public static getInstance(key: string): IView {
+        if (!View.instanceMap[key]) {
             View.instanceMap[key] = new View(key);
+        }
 
         return View.instanceMap[key];
     }
@@ -298,7 +303,7 @@ export class View implements IView {
      * @param key
      *        Key identifier of <code>View</code> instance to remove.
      */
-    static removeView(key: string): void {
+    public static removeView(key: string): void {
         delete View.instanceMap[key];
     }
 }

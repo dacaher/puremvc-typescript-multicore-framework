@@ -24,14 +24,14 @@ export class Model implements IModel {
      *
      * @protected
      */
-    proxyMap: Object = null;
+    protected proxyMap = {};
 
     /**
      * The multiton key for this core.
      *
      * @protected
      */
-    multitonKey: string = null;
+    protected multitonKey: string;
 
     /**
      * This <code>IModel</code> implementation is a multiton, so you should not call the
@@ -45,12 +45,12 @@ export class Model implements IModel {
      *        Throws an error if an instance for this multiton key has already been constructed.
      */
     constructor(key: string) {
-        if (Model.instanceMap[key])
+        if (Model.instanceMap[key]) {
             throw Error(Model.MULTITON_MSG);
+        }
 
         Model.instanceMap[key] = this;
         this.multitonKey = key;
-        this.proxyMap = {};
 
         this.initializeModel();
     }
@@ -63,7 +63,7 @@ export class Model implements IModel {
      *
      * @protected
      */
-    initializeModel(): void {
+    protected initializeModel(): void {
 
     }
 
@@ -73,7 +73,7 @@ export class Model implements IModel {
      * @param proxy
      *        An <code>IProxy</code> to be held by the <code>Model</code>.
      */
-    registerProxy(proxy: IProxy): void {
+    public registerProxy(proxy: IProxy): void {
         proxy.initializeNotifier(this.multitonKey);
         this.proxyMap[proxy.getProxyName()] = proxy;
         proxy.onRegister();
@@ -89,8 +89,8 @@ export class Model implements IModel {
      *        The <code>IProxy</code> that was removed from the <code>Model</code> or an
      *        explicit <code>null</null> if the <code>IProxy</code> didn't exist.
      */
-    removeProxy(proxyName: string): IProxy {
-        var proxy: IProxy = this.proxyMap[proxyName];
+    public removeProxy(proxyName: string): IProxy {
+        const proxy: IProxy = this.proxyMap[proxyName];
         if (proxy) {
             delete this.proxyMap[proxyName];
             proxy.onRemove();
@@ -109,8 +109,8 @@ export class Model implements IModel {
      *        The <code>IProxy</code> instance previously registered with the given
      *        <code>proxyName</code> or an explicit <code>null</code> if it doesn't exists.
      */
-    retrieveProxy(proxyName: string): IProxy {
-        //Return a strict null when the proxy doesn't exist
+    public retrieveProxy(proxyName: string): IProxy {
+        // Return a strict null when the proxy doesn't exist
         return this.proxyMap[proxyName] || null;
     }
 
@@ -123,7 +123,7 @@ export class Model implements IModel {
      * @return
      *        A Proxy is currently registered with the given <code>proxyName</code>.
      */
-    hasProxy(proxyName: string): boolean {
+    public hasProxy(proxyName: string): boolean {
         return this.proxyMap[proxyName] != null;
     }
 
@@ -134,14 +134,14 @@ export class Model implements IModel {
      * @constant
      * @protected
      */
-    static MULTITON_MSG: string = "Model instance for this multiton key already constructed!";
+    protected static MULTITON_MSG: string = "Model instance for this multiton key already constructed!";
 
     /**
      * <code>Model</code> singleton instance map.
      *
      * @protected
      */
-    static instanceMap: Object = {};
+    protected static instanceMap = {};
 
     /**
      * <code>Model</code> multiton factory method.
@@ -152,9 +152,10 @@ export class Model implements IModel {
      * @return
      *        The singleton instance of the <code>Model</code>.
      */
-    static getInstance(key): IModel {
-        if (!Model.instanceMap[key])
+    public static getInstance(key): IModel {
+        if (!Model.instanceMap[key]) {
             Model.instanceMap[key] = new Model(key);
+        }
 
         return Model.instanceMap[key];
     }
@@ -165,7 +166,7 @@ export class Model implements IModel {
      * @param key
      *        Multiton key identifier for the <code>Model</code> instance to remove.
      */
-    static removeModel(key): void {
+    public static removeModel(key): void {
         delete Model.instanceMap[key];
     }
 }

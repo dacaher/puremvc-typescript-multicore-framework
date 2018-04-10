@@ -22,18 +22,26 @@ import {Notifier} from "../observer/Notifier";
  */
 export class Proxy extends Notifier implements IProxy, INotifier {
     /**
+     * The default name of the <code>Proxy</code>
+     *
+     * @type
+     * @constant
+     */
+    public static NAME: string = "Proxy";
+
+    /**
      * The name of the <code>Proxy</code>.
      *
      * @protected
      */
-    proxyName: string = null;
+    protected proxyName: string = null;
 
     /**
      * The data object controlled by the <code>Proxy</code>.
      *
      * @protected
      */
-    data: any = null;
+    protected data: any = null;
 
     /**
      * Constructs a <code>Proxy</code> instance.
@@ -49,8 +57,9 @@ export class Proxy extends Notifier implements IProxy, INotifier {
 
         this.proxyName = (proxyName != null) ? proxyName : Proxy.NAME;
 
-        if (data != null)
+        if (data != null) {
             this.setData(data);
+        }
     }
 
     /**
@@ -59,7 +68,7 @@ export class Proxy extends Notifier implements IProxy, INotifier {
      * @return
      *        The name of the <code>Proxy></code> instance.
      */
-    getProxyName(): string {
+    public getProxyName(): string {
         return this.proxyName;
     }
 
@@ -69,7 +78,7 @@ export class Proxy extends Notifier implements IProxy, INotifier {
      * @param data
      *        The data to set for the <code>Proxy></code> instance.
      */
-    setData(data: any): void {
+    public setData(data: any): void {
         this.data = data;
     }
 
@@ -79,7 +88,7 @@ export class Proxy extends Notifier implements IProxy, INotifier {
      * @return
      *        The data held in the <code>Proxy</code> instance.
      */
-    getData(): any {
+    public getData(): any {
         return this.data;
     }
 
@@ -87,23 +96,15 @@ export class Proxy extends Notifier implements IProxy, INotifier {
      * Called by the Model when the <code>Proxy</code> is registered. This method has to be
      * overridden by the subclass to know when the instance is registered.
      */
-    onRegister(): void {
-
+    public onRegister(): void {
+        // Nothing to do here
     }
 
     /**
      * Called by the Model when the <code>Proxy</code> is removed. This method has to be
      * overridden by the subclass to know when the instance is removed.
      */
-    onRemove(): void {
-
+    public onRemove(): void {
+        // Nothing to do here
     }
-
-    /**
-     * The default name of the <code>Proxy</code>
-     *
-     * @type
-     * @constant
-     */
-    static NAME: string = "Proxy";
 }

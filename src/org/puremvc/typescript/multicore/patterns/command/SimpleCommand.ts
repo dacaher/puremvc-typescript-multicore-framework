@@ -20,7 +20,7 @@ export class SimpleCommand extends Notifier implements ICommand, INotifier {
      * @param notification
      *        The <code>INotification</code> to handle.
      */
-    execute(notification: INotification): void {
-
+    public execute(notification: INotification): void {
+        // Nothing to do here
     }
 }

@@ -24,7 +24,7 @@ export class MacroCommand extends Notifier implements ICommand, INotifier {
      *
      * @protected
      */
-    subCommands: Function[] = null;
+    private subCommands: Function[];
 
     /**
      * Constructs a <code>MacroCommand</code> instance.
@@ -39,6 +39,36 @@ export class MacroCommand extends Notifier implements ICommand, INotifier {
 
         this.subCommands = new Array<Function>();
         this.initializeMacroCommand();
+    }
+
+    /**
+     * Execute this <code>MacroCommand</code>'s <i>SubCommands</i>.
+     *
+     * The <i>SubCommands</i> will be called in First In/First Out (FIFO)
+     * order.
+     *
+     * @param notification
+     *        The <code>INotification</code> object to be passed to each <i>SubCommand</i> of
+     *        the list.
+     *
+     * @final
+     */
+    public execute(notification: INotification): void {
+        const subCommands: Function[] = this.subCommands.slice(0);
+        const len: number = this.subCommands.length;
+        for (let i: number = 0; i < len; i++) {
+            /*
+             * Typed any here instead of <code>Function</code> ( won't compile if set to Function
+             * because today the compiler consider that <code>Function</code> is not newable and
+             * doesn't have a <code>Class</code> type)
+             */
+            const commandClassRef: any = subCommands[i];
+            const commandInstance: ICommand = new commandClassRef() as ICommand;
+            commandInstance.initializeNotifier(this.multitonKey);
+            commandInstance.execute(notification);
+        }
+
+        this.subCommands.splice(0);
     }
 
     /**
@@ -61,8 +91,8 @@ export class MacroCommand extends Notifier implements ICommand, INotifier {
      *
      * @protected
      */
-    initializeMacroCommand(): void {
-
+    protected initializeMacroCommand(): void {
+        // Nothing to do here
     }
 
     /**
@@ -75,37 +105,7 @@ export class MacroCommand extends Notifier implements ICommand, INotifier {
      *
      * @protected
      */
-    addSubCommand(commandClassRef: Function): void {
+    protected addSubCommand(commandClassRef: Function): void {
         this.subCommands.push(commandClassRef);
-    }
-
-    /**
-     * Execute this <code>MacroCommand</code>'s <i>SubCommands</i>.
-     *
-     * The <i>SubCommands</i> will be called in First In/First Out (FIFO)
-     * order.
-     *
-     * @param notification
-     *        The <code>INotification</code> object to be passed to each <i>SubCommand</i> of
-     *        the list.
-     *
-     * @final
-     */
-    execute(notification: INotification): void {
-        var subCommands: Function[] = this.subCommands.slice(0);
-        var len: number = this.subCommands.length;
-        for (var i: number = 0; i < len; i++) {
-            /*
-             * Typed any here instead of <code>Function</code> ( won't compile if set to Function
-             * because today the compiler consider that <code>Function</code> is not newable and
-             * doesn't have a <code>Class</code> type)
-             */
-            var commandClassRef: any = subCommands[i];
-            var commandInstance: ICommand = <ICommand> /*</>*/ new commandClassRef();
-            commandInstance.initializeNotifier(this.multitonKey);
-            commandInstance.execute(notification);
-        }
-
-        this.subCommands.splice(0);
     }
 }

@@ -11,18 +11,25 @@ import {Notifier} from "../observer/Notifier";
  */
 export class Mediator extends Notifier implements IMediator, INotifier {
     /**
+     * Default name of the <code>Mediator</code>.
+     *
+     * @constant
+     */
+    public static NAME: string = "Mediator";
+
+    /**
      * The name of the <code>Mediator</code>.
      *
      * @protected
      */
-    mediatorName: string = null;
+    protected mediatorName: string = null;
 
     /**
      * The <code>Mediator</code>'s view component.
      *
      * @protected
      */
-    viewComponent: any = null;
+    protected viewComponent: any = null;
 
     /**
      * Constructs a <code>Mediator</code> instance.
@@ -46,7 +53,7 @@ export class Mediator extends Notifier implements IMediator, INotifier {
      * @return
      *        The <code>Mediator</code> instance name
      */
-    getMediatorName(): string {
+    public getMediatorName(): string {
         return this.mediatorName;
     }
 
@@ -57,16 +64,15 @@ export class Mediator extends Notifier implements IMediator, INotifier {
      * view object to a type, like this:
      *
      * <code>
-     *        getMenu():Menu
-     *        {
-		 *			return <Menu> this.viewComponent;
-		 *		}
+     *        getMenu():Menu {
+	 *			return <Menu> this.viewComponent;
+	 *		  }
      * </code>
      *
      * @return
      *        The <code>Mediator</code>'s default view component.
      */
-    getViewComponent(): any {
+    public getViewComponent(): any {
         return this.viewComponent;
     }
 
@@ -76,7 +82,7 @@ export class Mediator extends Notifier implements IMediator, INotifier {
      * @param viewComponent
      *        The default view component to set for this <code>Mediator</code>.
      */
-    setViewComponent(viewComponent: any): void {
+    public setViewComponent(viewComponent: any): void {
         this.viewComponent = viewComponent;
     }
 
@@ -87,7 +93,7 @@ export class Mediator extends Notifier implements IMediator, INotifier {
      * @return
      *        The list of notifications names in which is interested the <code>Mediator</code>.
      */
-    listNotificationInterests(): string[] {
+    public listNotificationInterests(): string[] {
         return new Array<string>();
     }
 
@@ -101,30 +107,23 @@ export class Mediator extends Notifier implements IMediator, INotifier {
      * @param notification
      *        The notification instance to be handled.
      */
-    handleNotification(notification: INotification): void {
-
+    public handleNotification(notification: INotification): void {
+        // Nothing to do here
     }
 
     /**
      * Called by the View when the Mediator is registered. This method has to be overridden
      * by the subclass to know when the instance is registered.
      */
-    onRegister(): void {
-
+    public onRegister(): void {
+        // Nothing to do here
     }
 
     /**
      * Called by the View when the Mediator is removed. This method has to be overridden
      * by the subclass to know when the instance is removed.
      */
-    onRemove(): void {
-
+    public onRemove(): void {
+        // Nothing to do here
     }
-
-    /**
-     * Default name of the <code>Mediator</code>.
-     *
-     * @constant
-     */
-    static NAME: string = 'Mediator';
 }

@@ -51,16 +51,6 @@ export class Observer implements IObserver {
     }
 
     /**
-     * Get the notification method.
-     *
-     * @return
-     *        The notification (callback) method of the interested object.
-     */
-    private getNotifyMethod(): Function {
-        return this.notify;
-    }
-
-    /**
      * Set the notification method.
      *
      * The notification method should take one parameter of type <code>INotification</code>.
@@ -68,18 +58,8 @@ export class Observer implements IObserver {
      * @param notifyMethod
      *        The notification (callback) method of the interested object.
      */
-    setNotifyMethod(notifyMethod: Function): void {
+    public setNotifyMethod(notifyMethod: Function): void {
         this.notify = notifyMethod;
-    }
-
-    /**
-     * Get the notification context.
-     *
-     * @return
-     *        The notification context (<code>this</code>) of the interested object.
-     */
-    private getNotifyContext(): any {
-        return this.context;
     }
 
     /**
@@ -88,7 +68,7 @@ export class Observer implements IObserver {
      * @param notifyContext
      *        The notification context (this) of the interested object.
      */
-    setNotifyContext(notifyContext: any): void {
+    public setNotifyContext(notifyContext: any): void {
         this.context = notifyContext;
     }
 
@@ -99,7 +79,7 @@ export class Observer implements IObserver {
      *        The <code>INotification</code> to pass to the interested object's notification
      *        method.
      */
-    notifyObserver(notification: INotification): void {
+    public notifyObserver(notification: INotification): void {
         this.getNotifyMethod().call(this.getNotifyContext(), notification);
     }
 
@@ -112,7 +92,27 @@ export class Observer implements IObserver {
      * @return
      *        The object and the notification context are the same.
      */
-    compareNotifyContext(object: any): boolean {
+    public compareNotifyContext(object: any): boolean {
         return object === this.context;
+    }
+
+    /**
+     * Get the notification method.
+     *
+     * @return
+     *        The notification (callback) method of the interested object.
+     */
+    private getNotifyMethod(): Function {
+        return this.notify;
+    }
+
+    /**
+     * Get the notification context.
+     *
+     * @return
+     *        The notification context (<code>this</code>) of the interested object.
+     */
+    private getNotifyContext(): any {
+        return this.context;
     }
 }

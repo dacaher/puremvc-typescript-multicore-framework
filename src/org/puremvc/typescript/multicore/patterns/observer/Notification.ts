@@ -64,7 +64,7 @@ export class Notification implements INotification {
      * @return
      *        The name of the <code>Notification</code> instance.
      */
-    getName(): string {
+    public getName(): string {
         return this.name;
     }
 
@@ -74,7 +74,7 @@ export class Notification implements INotification {
      * @param body
      *        The body of the <code>Notification</code> instance.
      */
-    setBody(body: any): void {
+    public setBody(body: any): void {
         this.body = body;
     }
 
@@ -84,7 +84,7 @@ export class Notification implements INotification {
      * @return
      *        The body object of the <code>Notification</code> instance.
      */
-    getBody(): any {
+    public getBody(): any {
         return this.body;
     }
 
@@ -94,7 +94,7 @@ export class Notification implements INotification {
      * @param type
      *        The type of the <code>Notification</code> instance.
      */
-    setType(type: string): void {
+    public setType(type: string): void {
         this.type = type;
     }
 
@@ -104,7 +104,7 @@ export class Notification implements INotification {
      * @return
      *        The type of the <code>Notification</code> instance.
      */
-    getType(): string {
+    public getType(): string {
         return this.type;
     }
 
@@ -112,10 +112,10 @@ export class Notification implements INotification {
      * Get a textual representation of the <code>Notification</code> instance.
      *
      * @return
-     *        The textual representation of the <code>Notification</code>    instance.
+     *        The textual representation of the <code>Notification</code> instance.
      */
-    toString(): string {
-        var msg: string = "Notification Name: " + this.getName();
+    public toString(): string {
+        let msg: string = "Notification Name: " + this.getName();
         msg += "\nBody:" + ((this.getBody() == null) ? "null" : this.getBody().toString());
         msg += "\nType:" + ((this.getType() == null) ? "null" : this.getType());
         return msg;

@@ -29,11 +29,19 @@ import {Facade} from "../facade/Facade";
  */
 export class Notifier implements INotifier {
     /**
+     * Message Constants
+     *
+     * @constant
+     * @protected
+     */
+    protected static MULTITON_MSG: string = "multitonKey for this Notifier not yet initialized!";
+
+    /**
      * The multiton key for this core.
      *
      * @protected
      */
-    multitonKey: string = null;
+    protected multitonKey: string = null;
 
     /**
      * Initialize a <code>Notifier</code> instance with its cor multiton key.
@@ -50,7 +58,7 @@ export class Notifier implements INotifier {
      * @param key
      *        The multiton key for this <code>Notifier</code> to use.
      */
-    initializeNotifier(key) {
+    public initializeNotifier(key) {
         this.multitonKey = key;
     }
 
@@ -69,9 +77,10 @@ export class Notifier implements INotifier {
      * @param type
      *        The type of the notification.
      */
-    sendNotification(name: string, body: any = null, type: string = null): void {
-        if (this.facade())
+    public sendNotification(name: string, body: any = null, type: string = null): void {
+        if (this.facade()) {
             this.facade().sendNotification(name, body, type);
+        }
     }
 
     /**
@@ -83,18 +92,11 @@ export class Notifier implements INotifier {
      * @throws
      *        Throws an error if the multiton key for this Notifier is not yet initialized.
      */
-    facade(): IFacade {
-        if (this.multitonKey === null)
+    public facade(): IFacade {
+        if (this.multitonKey === null) {
             throw Error(Notifier.MULTITON_MSG);
+        }
 
         return Facade.getInstance(this.multitonKey);
     }
-
-    /**
-     * Message Constants
-     *
-     * @constant
-     * @protected
-     */
-    static MULTITON_MSG: string = "multitonKey for this Notifier not yet initialized!";
 }

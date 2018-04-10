@@ -34,7 +34,7 @@ export class Notifier implements INotifier {
      * @constant
      * @protected
      */
-    protected static MULTITON_MSG: string = "multitonKey for this Notifier not yet initialized!";
+    protected static readonly MULTITON_MSG: string = "multitonKey for this Notifier not yet initialized!";
 
     /**
      * The multiton key for this core.
@@ -58,7 +58,7 @@ export class Notifier implements INotifier {
      * @param key
      *        The multiton key for this <code>Notifier</code> to use.
      */
-    public initializeNotifier(key) {
+    public initializeNotifier(key: string) {
         this.multitonKey = key;
     }
 

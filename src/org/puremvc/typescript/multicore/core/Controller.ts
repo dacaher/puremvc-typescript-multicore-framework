@@ -63,14 +63,14 @@ export class Controller implements IController {
      * @protected
      * @constant
      */
-    protected static MULTITON_MSG: string = "Controller instance for this multiton key already constructed!";
+    protected static readonly MULTITON_MSG: string = "Controller instance for this multiton key already constructed!";
 
     /**
      * <code>Controller</code> singleton instance map.
      *
      * @protected
      */
-    protected static instanceMap = {};
+    protected static instanceMap: { [key: string]: IController } = {};
 
     /**
      * Local reference to the <code>View</code> singleton.
@@ -84,7 +84,7 @@ export class Controller implements IController {
      *
      * @protected
      */
-    protected commandMap = {};
+    protected commandMap: { [key: string]: Function };
 
     /**
      * The multiton Key for this Core.
@@ -114,6 +114,8 @@ export class Controller implements IController {
         Controller.instanceMap[key] = this;
 
         this.multitonKey = key;
+        this.commandMap = {};
+
         this.initializeController();
     }
 
@@ -158,7 +160,7 @@ export class Controller implements IController {
      */
     public registerCommand(notificationName: string, commandClassRef: Function): void {
         if (!this.commandMap[notificationName]) {
-            this.view.registerObserver(notificationName, new Observer(this.executeCommand, this));
+            this.view!.registerObserver(notificationName, new Observer(this.executeCommand, this)); // ! -> non-null assertion operator
         }
 
         this.commandMap[notificationName] = commandClassRef;
@@ -190,7 +192,7 @@ export class Controller implements IController {
     public removeCommand(notificationName: string): void {
         // if the Command is registered...
         if (this.hasCommand(notificationName)) {
-            this.view.removeObserver(notificationName, this);
+            this.view!.removeObserver(notificationName, this); // ! -> non-null assertion operator
             delete this.commandMap[notificationName];
         }
     }

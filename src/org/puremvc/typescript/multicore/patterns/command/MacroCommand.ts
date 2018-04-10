@@ -37,7 +37,7 @@ export class MacroCommand extends Notifier implements ICommand, INotifier {
     constructor() {
         super();
 
-        this.subCommands = new Array<Function>();
+        this.subCommands = [];
         this.initializeMacroCommand();
     }
 

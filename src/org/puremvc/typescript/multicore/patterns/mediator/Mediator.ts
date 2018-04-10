@@ -15,7 +15,7 @@ export class Mediator extends Notifier implements IMediator, INotifier {
      *
      * @constant
      */
-    public static NAME: string = "Mediator";
+    public static readonly NAME: string = "Mediator";
 
     /**
      * The name of the <code>Mediator</code>.
@@ -94,7 +94,7 @@ export class Mediator extends Notifier implements IMediator, INotifier {
      *        The list of notifications names in which is interested the <code>Mediator</code>.
      */
     public listNotificationInterests(): string[] {
-        return new Array<string>();
+        return [];
     }
 
     /**

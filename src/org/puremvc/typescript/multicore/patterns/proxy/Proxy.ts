@@ -24,10 +24,10 @@ export class Proxy extends Notifier implements IProxy, INotifier {
     /**
      * The default name of the <code>Proxy</code>
      *
-     * @type
+     * @type string
      * @constant
      */
-    public static NAME: string = "Proxy";
+    public static readonly NAME: string = "Proxy";
 
     /**
      * The name of the <code>Proxy</code>.

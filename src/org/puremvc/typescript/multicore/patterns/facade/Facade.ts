@@ -84,14 +84,14 @@ export class Facade implements IFacade {
      * @constant
      * @protected
      */
-    protected static MULTITON_MSG: string = "Facade instance for this multiton key already constructed!";
+    protected static readonly MULTITON_MSG: string = "Facade instance for this multiton key already constructed!";
 
     /**
      * <code>Facade</code> singleton instance map.
      *
      * @protected
      */
-    protected static instanceMap = {};
+    protected static instanceMap: { [key: string]: IFacade } = {};
 
     /**
      * Local reference to the <code>Model</code> multiton.

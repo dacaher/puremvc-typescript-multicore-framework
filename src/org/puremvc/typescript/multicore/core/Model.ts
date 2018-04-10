@@ -28,7 +28,7 @@ export class Model implements IModel {
      * @return
      *        The singleton instance of the <code>Model</code>.
      */
-    public static getInstance(key): IModel {
+    public static getInstance(key: string): IModel {
         if (!Model.instanceMap[key]) {
             Model.instanceMap[key] = new Model(key);
         }
@@ -42,7 +42,7 @@ export class Model implements IModel {
      * @param key
      *        Multiton key identifier for the <code>Model</code> instance to remove.
      */
-    public static removeModel(key): void {
+    public static removeModel(key: string): void {
         delete Model.instanceMap[key];
     }
 
@@ -53,21 +53,21 @@ export class Model implements IModel {
      * @constant
      * @protected
      */
-    protected static MULTITON_MSG: string = "Model instance for this multiton key already constructed!";
+    protected static readonly MULTITON_MSG: string = "Model instance for this multiton key already constructed!";
 
     /**
      * <code>Model</code> singleton instance map.
      *
      * @protected
      */
-    protected static instanceMap = {};
+    protected static instanceMap: { [key: string]: IModel } = {};
 
     /**
      * HashTable of <code>IProxy</code> registered with the <code>Model</code>.
      *
      * @protected
      */
-    protected proxyMap = {};
+    protected proxyMap: { [key: string]: IProxy };
 
     /**
      * The multiton key for this core.
@@ -93,7 +93,9 @@ export class Model implements IModel {
         }
 
         Model.instanceMap[key] = this;
+
         this.multitonKey = key;
+        this.proxyMap = {};
 
         this.initializeModel();
     }
@@ -167,6 +169,6 @@ export class Model implements IModel {
      * @protected
      */
     protected initializeModel(): void {
-
+        // Nothing to do here
     }
 }

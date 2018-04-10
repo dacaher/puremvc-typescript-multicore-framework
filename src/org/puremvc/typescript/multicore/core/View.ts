@@ -57,28 +57,28 @@ export class View implements IView {
      * @constant
      * @protected
      */
-    protected static MULTITON_MSG: string = "View instance for this multiton key already constructed!";
+    protected static readonly MULTITON_MSG: string = "View instance for this multiton key already constructed!";
 
     /**
      * <code>View</code> singleton instance map.
      *
      * @protected
      */
-    protected static instanceMap = {};
+    protected static instanceMap: { [key: string]: IView } = {};
 
     /**
      * Mapping of <code>Mediator</code> names to <code>Mediator</code> instances.
      *
      * @protected
      */
-    protected mediatorMap = {};
+    protected mediatorMap: { [key: string]: IMediator };
 
     /**
      * Mapping of <code>Notification</code> names to <code>Observers</code> lists.
      *
      * @protected
      */
-    protected observerMap = {};
+    protected observerMap: { [key: string]: IObserver[] } = {};
 
     /**
      * Multiton key for this <code>View</code> instance.
@@ -106,6 +106,7 @@ export class View implements IView {
         View.instanceMap[key] = this;
 
         this.multitonKey = key;
+        this.mediatorMap = {};
 
         this.initializeView();
     }
@@ -262,26 +263,24 @@ export class View implements IView {
     public removeMediator(mediatorName: string): IMediator {
         // Retrieve the named mediator
         const mediator: IMediator = this.mediatorMap[mediatorName];
-        if (!mediator) {
-            return null;
+        if (mediator) {
+            // Get Notification interests, if any.
+            const interests: string[] = mediator.listNotificationInterests();
+
+            // For every notification this mediator is interested in...
+            let i: number = interests.length;
+            while (i--) {
+                this.removeObserver(interests[i], mediator);
+            }
+
+            // remove the mediator from the map
+            delete this.mediatorMap[mediatorName];
+
+            // Alert the mediator that it has been removed
+            mediator.onRemove();
         }
 
-        // Get Notification interests, if any.
-        const interests: string[] = mediator.listNotificationInterests();
-
-        // For every notification this mediator is interested in...
-        let i: number = interests.length;
-        while (i--) {
-            this.removeObserver(interests[i], mediator);
-        }
-
-        // remove the mediator from the map
-        delete this.mediatorMap[mediatorName];
-
-        // Alert the mediator that it has been removed
-        mediator.onRemove();
-
-        return mediator;
+        return mediator || null;
     }
 
     /**
@@ -304,6 +303,6 @@ export class View implements IView {
      * multiton instance in a subclass without overriding the constructor.
      */
     protected initializeView(): void {
-
+        // Nothing to do here
     }
 }

@@ -98,28 +98,28 @@ export class Facade implements IFacade {
      *
      * @protected
      */
-    protected model: IModel = null;
+    protected model!: IModel;
 
     /**
      * Local reference to the <code>View</code> multiton.
      *
      * @protected
      */
-    protected view: IView = null;
+    protected view!: IView;
 
     /**
      * Local reference to the <code>Controller</code> multiton.
      *
      * @protected
      */
-    protected controller: IController = null;
+    protected controller!: IController;
 
     /**
      * The multiton Key for this Core.
      *
      * @protected
      */
-    protected multitonKey: string;
+    protected multitonKey!: string;
 
     /**
      * Constructs a <code>Controller</code> instance.
@@ -220,8 +220,8 @@ export class Facade implements IFacade {
      * @return
      *        The <code>IProxy</code> that was removed from the <code>Model</code>
      */
-    public removeProxy(proxyName: string): IProxy {
-        let proxy: IProxy;
+    public removeProxy(proxyName: string): IProxy | null {
+        let proxy: IProxy | null = null;
         if (this.model) {
             proxy = this.model.removeProxy(proxyName);
         }
@@ -278,8 +278,8 @@ export class Facade implements IFacade {
      * @return
      *        The <code>IMediator</code> that was removed from the <code>IView</code>
      */
-    public removeMediator(mediatorName: string): IMediator {
-        let mediator: IMediator;
+    public removeMediator(mediatorName: string): IMediator | null {
+        let mediator: IMediator | null = null;
         if (this.view) {
             mediator = this.view.removeMediator(mediatorName);
         }
@@ -335,7 +335,7 @@ export class Facade implements IFacade {
      * @param type
      *        The type of the notification to send.
      */
-    public sendNotification(name: string, body: any = null, type: string = null): void {
+    public sendNotification(name: string, body: any = null, type?: string): void {
         this.notifyObservers(new Notification(name, body, type));
     }
 

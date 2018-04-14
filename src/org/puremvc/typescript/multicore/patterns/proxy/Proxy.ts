@@ -34,7 +34,7 @@ export class Proxy extends Notifier implements IProxy, INotifier {
      *
      * @protected
      */
-    protected proxyName: string = null;
+    protected proxyName: string;
 
     /**
      * The data object controlled by the <code>Proxy</code>.
@@ -52,7 +52,7 @@ export class Proxy extends Notifier implements IProxy, INotifier {
      * @param data
      *        An initial data object to be held by the <code>Proxy</code>.
      */
-    constructor(proxyName: string = null, data: any = null) {
+    constructor(proxyName?: string, data: any = null) {
         super();
 
         this.proxyName = (proxyName != null) ? proxyName : Proxy.NAME;

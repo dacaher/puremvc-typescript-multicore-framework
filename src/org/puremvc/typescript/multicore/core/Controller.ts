@@ -77,7 +77,7 @@ export class Controller implements IController {
      *
      * @protected
      */
-    protected view: IView = null;
+    protected view!: IView;
 
     /**
      * Mapping of <code>Notification<code> names to <code>Command</code> constructors references.
@@ -160,7 +160,7 @@ export class Controller implements IController {
      */
     public registerCommand(notificationName: string, commandClassRef: Function): void {
         if (!this.commandMap[notificationName]) {
-            this.view!.registerObserver(notificationName, new Observer(this.executeCommand, this)); // ! -> non-null assertion operator
+            this.view.registerObserver(notificationName, new Observer(this.executeCommand, this)); // ! -> non-null assertion operator
         }
 
         this.commandMap[notificationName] = commandClassRef;
@@ -192,7 +192,7 @@ export class Controller implements IController {
     public removeCommand(notificationName: string): void {
         // if the Command is registered...
         if (this.hasCommand(notificationName)) {
-            this.view!.removeObserver(notificationName, this); // ! -> non-null assertion operator
+            this.view.removeObserver(notificationName, this); // ! -> non-null assertion operator
             delete this.commandMap[notificationName];
         }
     }

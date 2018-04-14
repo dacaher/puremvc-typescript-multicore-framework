@@ -79,7 +79,7 @@ export interface IFacade extends INotifier {
      * @return
      *        The <code>IProxy</code> that was removed from the <code>Model</code>
      */
-    removeProxy(proxyName: string): IProxy;
+    removeProxy(proxyName: string): IProxy | null;
 
     /**
      * Check if a <code>Proxy</code> is registered.
@@ -122,7 +122,7 @@ export interface IFacade extends INotifier {
      * @return
      *        The <code>IMediator</code> that was removed from the <code>IView</code>
      */
-    removeMediator(mediatorName: string): IMediator;
+    removeMediator(mediatorName: string): IMediator | null;
 
     /**
      * Check if a Mediator is registered or not

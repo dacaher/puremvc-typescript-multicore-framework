@@ -61,7 +61,7 @@ export interface INotification {
      * @return
      *        The type of the <code>INotification</code>.
      */
-    getType(): string;
+    getType(): string | null;
 
     /**
      * Get a textual representation of the <code>Notification</code> instance.

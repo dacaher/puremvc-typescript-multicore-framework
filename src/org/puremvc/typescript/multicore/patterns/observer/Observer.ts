@@ -29,7 +29,7 @@ export class Observer implements IObserver {
     /**
      * The notification method of the interested object.
      */
-    private notify: Function = null;
+    private notify!: Function;
 
     /**
      * The notification context of the interested object.

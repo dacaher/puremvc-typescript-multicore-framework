@@ -41,7 +41,7 @@ export class Notifier implements INotifier {
      *
      * @protected
      */
-    protected multitonKey: string = null;
+    protected multitonKey!: string;
 
     /**
      * Initialize a <code>Notifier</code> instance with its cor multiton key.
@@ -77,7 +77,7 @@ export class Notifier implements INotifier {
      * @param type
      *        The type of the notification.
      */
-    public sendNotification(name: string, body: any = null, type: string = null): void {
+    public sendNotification(name: string, body: any = null, type?: string): void {
         if (this.facade()) {
             this.facade().sendNotification(name, body, type);
         }

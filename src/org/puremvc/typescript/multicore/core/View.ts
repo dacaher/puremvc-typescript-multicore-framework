@@ -103,7 +103,7 @@ export class View implements IView {
             throw Error(View.MULTITON_MSG);
         }
 
-        View.instanceMap[key] = this;
+        View.instanceMap[key] = this as IView;
 
         this.multitonKey = key;
         this.mediatorMap = {};
@@ -123,9 +123,8 @@ export class View implements IView {
      *        The <code>IObserver</code> to register.
      */
     public registerObserver(notificationName: string, observer: IObserver): void {
-        const observers: IObserver[] = this.observerMap[notificationName];
-        if (observers) {
-            observers.push(observer);
+        if (this.observerMap[notificationName]) {
+            this.observerMap[notificationName].push(observer);
         } else {
             this.observerMap[notificationName] = [observer];
         }

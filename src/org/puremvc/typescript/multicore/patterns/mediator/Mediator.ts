@@ -22,7 +22,7 @@ export class Mediator extends Notifier implements IMediator, INotifier {
      *
      * @protected
      */
-    protected mediatorName: string = null;
+    protected mediatorName: string;
 
     /**
      * The <code>Mediator</code>'s view component.
@@ -40,7 +40,7 @@ export class Mediator extends Notifier implements IMediator, INotifier {
      * @param viewComponent
      *        The view component handled by this <code>Mediator</code>.
      */
-    constructor(mediatorName: string = null, viewComponent: any = null) {
+    constructor(mediatorName?: string, viewComponent: any = null) {
         super();
 
         this.mediatorName = (mediatorName != null) ? mediatorName : Mediator.NAME;

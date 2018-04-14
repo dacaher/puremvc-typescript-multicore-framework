@@ -28,17 +28,17 @@ export class Notification implements INotification {
     /**
      * The name of the <code>Notification</code>.
      */
-    private name: string = null;
+    private name: string;
 
     /**
      * The body data to send with the <code>Notification</code>.
      */
-    private body: any = null;
+    private body: any;
 
     /**
      * The type identifier of the <code>Notification</code>.
      */
-    private type: string = null;
+    private type: string | null;
 
     /**
      * Constructs a <code>Notification</code> instance.
@@ -52,10 +52,10 @@ export class Notification implements INotification {
      * @param type
      *        Type identifier of the <code>Notification</code>.
      */
-    constructor(name: string, body: any = null, type: string = null) {
+    constructor(name: string, body: any = null, type?: string) {
         this.name = name;
         this.body = body;
-        this.type = type;
+        this.type = type || null;
     }
 
     /**
@@ -104,7 +104,7 @@ export class Notification implements INotification {
      * @return
      *        The type of the <code>Notification</code> instance.
      */
-    public getType(): string {
+    public getType(): string | null {
         return this.type;
     }
 
